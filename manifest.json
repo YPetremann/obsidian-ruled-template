@@ -1,11 +1,11 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "obsidian-ruled-template",
+	"name": "Ruled template",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "This is a sample plugin for Obsidian. This plugin demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "This plugin allow to use templates bassed on rules when creating a new file.",
+	"author": "YPetremann",
+	"authorUrl": "https://obsidian-regex-template.ypetremann.com",
+	"fundingUrl": "https://obsidian-regex-template.ypetremann.com/pricing",
 	"isDesktopOnly": false
 }

@@ -1,23 +1,38 @@
 {
-	"name": "obsidian-sample-plugin",
+	"name": "obsidian-ruled-template",
 	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "This plugin allow to use templates bassed on rules when creating a new file.",
+	"keywords": [],
+	"homepage": "https://obsidian-ruled-template.ypetremann.com",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/YPetremann/obsidian-ruled-template.git"
+	},
+	"license": "MIT",
+	"author": "YPetremann",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-		"version": "node version-bump.mjs && git add manifest.json versions.json"
+		"release": "standard-version",
+		"publish": "git push --follow-tags origin master"
 	},
-	"keywords": [],
-	"author": "",
-	"license": "MIT",
+	"dependencies": {
+		"@popperjs/core": "^2.11.8",
+		"micromatch": "^4.0.5"
+	},
+	"standard-version": {
+		"t": ""
+	},
 	"devDependencies": {
+		"@types/micromatch": "^4.0.2",
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
 		"@typescript-eslint/parser": "5.29.0",
 		"builtin-modules": "3.3.0",
 		"esbuild": "0.17.3",
 		"obsidian": "latest",
+		"standard-version": "^9.5.0",
 		"tslib": "2.4.0",
 		"typescript": "4.7.4"
 	}

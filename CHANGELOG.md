@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/YPetremann/obsidian-ruled-template/compare/1.0.0...1.0.1) (2023-07-14)
+
+
+### Bug Fixes
+
+* plugin naming to align with community recommendation ([840af4f](https://github.com/YPetremann/obsidian-ruled-template/commit/840af4ffa4fb0ee83f3921fed859da92964b35e0))
+
 ## 1.0.0 (2023-07-14)
 
 

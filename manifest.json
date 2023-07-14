@@ -1,7 +1,7 @@
 {
 	"id": "ruled-template",
 	"name": "Ruled template",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "This plugin allow to use templates bassed on rules when creating a new file.",
 	"author": "YPetremann",

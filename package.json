@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-ruled-template",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "This plugin allow to use templates bassed on rules when creating a new file.",
 	"keywords": [],
 	"homepage": "https://obsidian-ruled-template.ypetremann.com",

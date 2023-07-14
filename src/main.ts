@@ -1,5 +1,5 @@
-import { Plugin, TAbstractFile } from "obsidian";
-import { TemplateRulesSettingTab } from "./TemplateRulesSettingTab";
+import { Plugin, TFile } from "obsidian";
+import { RuledTemplateSettingTab } from "./TemplateRulesSettingTab";
 import micromatch from "micromatch";
 
 export interface TemplateRule {
@@ -8,19 +8,18 @@ export interface TemplateRule {
 	template: string;
 }
 
-export interface MyPluginSettings {
+export interface RuledTemplateSettings {
 	templates_folder: string;
 	templates_rules: TemplateRule[];
 }
 
-export const DEFAULT_SETTINGS: MyPluginSettings = {
+export const DEFAULT_SETTINGS: RuledTemplateSettings = {
 	templates_folder: "",
 	templates_rules: [{ type: "glob", pattern: "", template: "" }],
 };
 
-export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
-	isReady = false;
+export default class RuledTemplate extends Plugin {
+	settings: RuledTemplateSettings;
 
 	async loadSettings() {
 		const settings = await this.loadData();
@@ -33,70 +32,52 @@ export default class MyPlugin extends Plugin {
 
 	async onload() {
 		await this.loadSettings();
-		this.app.workspace.onLayoutReady(() => {
-			this.isReady = true;
-		});
 		//*
+		this.addSettingTab(new RuledTemplateSettingTab(this.app, this));
 		this.registerEvent(
-			this.app.vault.on("create", (file) => {
-				console.log("file-open", file?.path);
-				const reason = this.blockProcessFile(file);
-				console.log("reason", reason);
-				if (!reason) this.insertTemplate(file);
+			this.app.vault.on("create", async (file) => {
+				if (!file || !(file instanceof TFile)) return;
+				const [, template] = await this.checkRules(file.path);
+				if (!template) return;
+				this.insertTemplate(file, template);
 			})
 		);
-		/*/
-		this.registerEvent(
-			this.app.workspace.on("file-open", async (file) => {
-				console.log("file-open", file?.path);
-				const reason = this.blockProcessFile(file);
-				console.log("reason", reason);
-				if (!reason) this.insertTemplate(file);
-			})
-		);
-		// */
-		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new TemplateRulesSettingTab(this.app, this));
 	}
 	onunload() {}
-	blockProcessFile(file: TAbstractFile): string | false {
-		if (!file) return "no file";
-		if (!this.isReady) return "not ready";
-		if (!file.path.endsWith(".md")) return "not a markdown file";
-		//if (file.stat.ctime !== file.stat.mtime)
-		//	return "file has only been modified";
-		//if (file.stat.size !== 0) return "file is not empty";
-		//const activeFile = this.app.workspace.getActiveFile();
-		//if (activeFile?.path !== file.path) return "file is not active";
-		const templates_folder = this.settings.templates_folder;
-		if (!templates_folder) return "no template folder";
-		if (file.path.startsWith(templates_folder))
-			return "file is in template folder";
-		return false;
+	async checkRules(path: string): Promise<[string, TFile?]> {
+		try {
+			if (!path) throw "➖ give a path to check rules";
+			const rules = this.settings.templates_rules;
+			const match = rules.find(({ pattern, template }) => {
+				if (pattern.startsWith("/") && pattern.endsWith("/")) {
+					try {
+						const regex = new RegExp(pattern.slice(1, -1));
+						if (!regex.test(path)) return false;
+					} catch {
+						throw `❌ ${pattern} is not a valid regex`;
+					}
+				} else {
+					try {
+						if (!micromatch.isMatch(path, pattern)) return false;
+					} catch {
+						throw `❌ ${pattern} is not a valid glob`;
+					}
+				}
+				const file = app.vault.getAbstractFileByPath(template);
+				if (file instanceof TFile) return true;
+				throw `❌ ${template} is not a file`;
+			});
+			if (!match) throw `➖ ${path} match nothing`;
+			const { template } = match;
+			const file = app.vault.getAbstractFileByPath(template) as TFile;
+			const index = rules.indexOf(match) + 1;
+			return [`✔️ ${path} matched ${index} ${template}`, file];
+		} catch (msg) {
+			return [msg];
+		}
 	}
-	async insertTemplate(file: TAbstractFile | null): Promise<void> {
-		if (!file) return;
-		console.log("insertTemplate");
-		const path = file.path;
-		console.log("path", path);
-		const match = this.settings.templates_rules.find(({ pattern }) => {
-			console.log("rule", pattern);
-			try {
-				return new RegExp(pattern).test(path);
-			} catch {
-				console.error("invalid regex");
-			}
-			try {
-				return micromatch.isMatch(path, pattern);
-			} catch {
-				console.error("invalid glob");
-			}
-		});
-		if (!match) return;
-		console.log("matched ${match.template}");
-		const content = await file.vault.adapter.read(match.template);
-		//await file.vault.adapter.write(path, content);
-		await file.vault.adapter.append(path, content);
-		//this.app.commands.executeCommandById("insert-template");
+	async insertTemplate(file: TFile, template: TFile): Promise<void> {
+		const content = await file.vault.read(template);
+		await file.vault.append(file, content);
 	}
 }

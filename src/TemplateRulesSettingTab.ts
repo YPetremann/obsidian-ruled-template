@@ -1,14 +1,14 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
-import type MyPlugin from "./main";
+import type RuledTemplate from "./main";
 import { arraymove } from "./utils";
 import { FileSuggest, FileSuggestMode } from "./FileSuggester";
 import { FolderSuggest } from "./FolderSuggester";
 import micromatch from "micromatch";
 
-export class TemplateRulesSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+export class RuledTemplateSettingTab extends PluginSettingTab {
+	plugin: RuledTemplate;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: RuledTemplate) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
@@ -34,7 +34,6 @@ export class TemplateRulesSettingTab extends PluginSettingTab {
 	}
 	check_rules() {}
 	add_file_check(): void {
-		const rules = this.plugin.settings.templates_rules;
 		const s = new Setting(this.containerEl)
 			.setName("Test rules with a path")
 			.setDesc("➖ check if a file match a rule.")
@@ -45,29 +44,9 @@ export class TemplateRulesSettingTab extends PluginSettingTab {
 					FileSuggestMode.AnyFiles
 				);
 				cb.setPlaceholder("Example: folder/file.md").onChange(
-					(path) => {
-						if (!path)
-							return s.setDesc(
-								"➖ check if a file match a rule."
-							);
-
-						console.log("path", path);
-						const match = rules.find(({ pattern }) => {
-							console.log("rule", pattern);
-							try {
-								return new RegExp(pattern).test(path);
-							} catch {
-								console.error("invalid regex");
-							}
-							try {
-								return micromatch.isMatch(path, pattern);
-							} catch {
-								console.error("invalid glob");
-							}
-						});
-						if (!match) return s.setDesc(`❌ ${path} don't match`);
-						console.log(`matched ${match.template}`);
-						s.setDesc(`✅ matched ${match.template}`);
+					async (path) => {
+						const [msg] = await this.plugin.checkRules(path);
+						s.setDesc(msg);
 					}
 				);
 			});
@@ -76,7 +55,8 @@ export class TemplateRulesSettingTab extends PluginSettingTab {
 		const rules = this.plugin.settings.templates_rules;
 		new Setting(this.containerEl)
 			.setName("Template rules")
-			.setDesc("list of rules to decide the template used.");
+			.setDesc("list of rules to decide the template used.")
+			.setHeading();
 
 		rules.forEach((rule, index) => {
 			const s = new Setting(this.containerEl)
@@ -104,7 +84,6 @@ export class TemplateRulesSettingTab extends PluginSettingTab {
 							await this.plugin.saveSettings();
 						});
 					// @ts-ignore
-					cb.containerEl.addClass("templater_search");
 				})
 				.addExtraButton((cb) => {
 					cb.setIcon("up-chevron-glyph")
@@ -139,7 +118,9 @@ export class TemplateRulesSettingTab extends PluginSettingTab {
 							this.display();
 						});
 				});
-			s.infoEl.remove();
+			s.setName(`${index}`);
+			s.setClass("RuledTemplate__template_rule");
+			//s.setDesc("a");
 		});
 
 		new Setting(this.containerEl).addButton((cb) => {

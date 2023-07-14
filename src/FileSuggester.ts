@@ -4,7 +4,7 @@ import { TAbstractFile, TFile } from "obsidian";
 import { TextInputSuggest } from "./suggest";
 import { get_tfiles_from_folder } from "./utils";
 import { errorWrapperSync } from "./Error";
-import MyPlugin from "./main.js";
+import RuledTemplate from "./main.js";
 
 export enum FileSuggestMode {
 	TemplateFiles,
@@ -14,7 +14,7 @@ export enum FileSuggestMode {
 export class FileSuggest extends TextInputSuggest<TFile> {
 	constructor(
 		public inputEl: HTMLInputElement,
-		private plugin: MyPlugin,
+		private plugin: RuledTemplate,
 		private mode: FileSuggestMode
 	) {
 		super(inputEl);

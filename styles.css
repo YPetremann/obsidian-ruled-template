@@ -6,3 +6,10 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+.RuledTemplate__template_rule .setting-item-control > input,
+.RuledTemplate__template_rule .search-input-container {
+	flex: 1 0 auto;
+}
+.RuledTemplate__template_rule .setting-item-info {
+	flex: 0 0 auto;
+}

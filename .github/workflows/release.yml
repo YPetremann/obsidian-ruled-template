@@ -9,7 +9,7 @@ permissions:
     contents: "write"
 
 env:
-    PLUGIN_NAME: obsidian-ruled-template # Change this to match the id of your plugin.
+    PLUGIN_NAME: ruled-template # Change this to match the id of your plugin.
 
 jobs:
     build:

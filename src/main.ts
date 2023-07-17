@@ -48,6 +48,7 @@ export default class RuledTemplate extends Plugin {
 		try {
 			if (!path) throw "➖ give a path to check rules";
 			const rules = this.settings.templates_rules;
+			let file: TFile | undefined = undefined;
 			const match = rules.find(({ pattern, template }) => {
 				if (pattern.startsWith("/") && pattern.endsWith("/")) {
 					try {
@@ -63,13 +64,15 @@ export default class RuledTemplate extends Plugin {
 						throw `❌ ${pattern} is not a valid glob`;
 					}
 				}
-				const file = app.vault.getAbstractFileByPath(template);
-				if (file instanceof TFile) return true;
+				const tfile = app.vault.getAbstractFileByPath(template);
+				if (tfile instanceof TFile) {
+					file = tfile;
+					return true;
+				}
 				throw `❌ ${template} is not a file`;
 			});
-			if (!match) throw `➖ ${path} match nothing`;
+			if (!match || !file) throw `➖ ${path} match nothing`;
 			const { template } = match;
-			const file = app.vault.getAbstractFileByPath(template) as TFile;
 			const index = rules.indexOf(match) + 1;
 			return [`✔️ ${path} matched ${index} ${template}`, file];
 		} catch (msg) {

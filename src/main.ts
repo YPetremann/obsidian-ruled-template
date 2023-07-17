@@ -64,7 +64,7 @@ export default class RuledTemplate extends Plugin {
 						throw `❌ ${pattern} is not a valid glob`;
 					}
 				}
-				const tfile = app.vault.getAbstractFileByPath(template);
+				const tfile = this.app.vault.getAbstractFileByPath(template);
 				if (tfile instanceof TFile) {
 					file = tfile;
 					return true;

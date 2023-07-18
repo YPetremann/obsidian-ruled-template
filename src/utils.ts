@@ -1,48 +1,17 @@
 import { TemplaterError } from "./Error";
 import { normalizePath, TAbstractFile, TFile, TFolder, Vault } from "obsidian";
 
-export function delay(ms: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-export function escape_RegExp(str: string): string {
-	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
-}
-
-export function generate_command_regex(): RegExp {
-	return /<%(?:-|_)?\s*[*~]{0,1}((?:.|\s)*?)(?:-|_)?%>/g;
-}
-
-export function generate_dynamic_command_regex(): RegExp {
-	return /(<%(?:-|_)?\s*[*~]{0,1})\+((?:.|\s)*?%>)/g;
-}
-
 export function resolve_tfolder(folder_str: string): TFolder {
 	folder_str = normalizePath(folder_str);
 
 	const folder = app.vault.getAbstractFileByPath(folder_str);
-	if (!folder) {
+	if (!folder)
 		throw new TemplaterError(`Folder "${folder_str}" doesn't exist`);
-	}
-	if (!(folder instanceof TFolder)) {
+
+	if (!(folder instanceof TFolder))
 		throw new TemplaterError(`${folder_str} is a file, not a folder`);
-	}
 
 	return folder;
-}
-
-export function resolve_tfile(file_str: string): TFile {
-	file_str = normalizePath(file_str);
-
-	const file = app.vault.getAbstractFileByPath(file_str);
-	if (!file) {
-		throw new TemplaterError(`File "${file_str}" doesn't exist`);
-	}
-	if (!(file instanceof TFile)) {
-		throw new TemplaterError(`${file_str} is a folder, not a file`);
-	}
-
-	return file;
 }
 
 export function get_tfiles_from_folder(folder_str: string): Array<TFile> {

@@ -3,7 +3,6 @@ import type RuledTemplate from "./main";
 import { arraymove } from "./utils";
 import { FileSuggest, FileSuggestMode } from "./FileSuggester";
 import { FolderSuggest } from "./FolderSuggester";
-import micromatch from "micromatch";
 
 export class RuledTemplateSettingTab extends PluginSettingTab {
 	plugin: RuledTemplate;
@@ -23,7 +22,7 @@ export class RuledTemplateSettingTab extends PluginSettingTab {
 			.setName("Template folder location")
 			.setDesc("indicate template folder easier search of templates.")
 			.addSearch((cb) => {
-				new FolderSuggest(cb.inputEl);
+				new FolderSuggest(cb.inputEl, this.plugin);
 				cb.setPlaceholder("Example: folder1/folder2")
 					.setValue(this.plugin.settings.templates_folder)
 					.onChange((value) => {
@@ -32,7 +31,6 @@ export class RuledTemplateSettingTab extends PluginSettingTab {
 					});
 			});
 	}
-	check_rules() {}
 	add_file_check(): void {
 		const s = new Setting(this.containerEl)
 			.setName("Test rules with a path")

@@ -14,10 +14,10 @@ export enum FileSuggestMode {
 export class FileSuggest extends TextInputSuggest<TFile> {
 	constructor(
 		public inputEl: HTMLInputElement,
-		private plugin: RuledTemplate,
+		plugin: RuledTemplate,
 		private mode: FileSuggestMode
 	) {
-		super(inputEl);
+		super(inputEl, plugin);
 	}
 
 	get_folder(mode: FileSuggestMode): string {
@@ -43,10 +43,7 @@ export class FileSuggest extends TextInputSuggest<TFile> {
 			() => get_tfiles_from_folder(this.get_folder(this.mode)),
 			this.get_error_msg(this.mode)
 		);
-		if (!all_files) {
-			return [];
-		}
-
+		if (!all_files) return [];
 		const files: TFile[] = [];
 		const lower_input_str = input_str.toLowerCase();
 

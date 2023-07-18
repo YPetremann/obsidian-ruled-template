@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/YPetremann/obsidian-ruled-template/compare/1.0.1...1.0.2) (2023-07-18)
+
+
+### Bug Fixes
+
+* added LICENSE info ([e2e8781](https://github.com/YPetremann/obsidian-ruled-template/commit/e2e8781659337b9ea71f1311d5e9d2887dbccf53))
+* cleanup of unused function, retructured to align to obsidian guidelines ([c55e2aa](https://github.com/YPetremann/obsidian-ruled-template/commit/c55e2aaa42151d1f9bb31402e20387faba55d144))
+* ue this.app.vault instead of app.vault ([95d9298](https://github.com/YPetremann/obsidian-ruled-template/commit/95d9298ca04a7966df6e9581fa57b4eab5f3cc1c))
+* Update manifest.json description ([be6a558](https://github.com/YPetremann/obsidian-ruled-template/commit/be6a558dd6e621aa6e81d0e19dc24125459fbf9c))
+* updated checkRules to check instance of TFile ([f885495](https://github.com/YPetremann/obsidian-ruled-template/commit/f885495120be25f46170e80f3e594020c74ce85e))
+
 ### [1.0.1](https://github.com/YPetremann/obsidian-ruled-template/compare/1.0.0...1.0.1) (2023-07-14)
 
 

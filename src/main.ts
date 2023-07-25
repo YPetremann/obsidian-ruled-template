@@ -1,4 +1,4 @@
-import { Plugin, TFile } from "obsidian";
+import { Notice, Plugin, TFile } from "obsidian";
 import { RuledTemplateSettingTab } from "./TemplateRulesSettingTab";
 import micromatch from "micromatch";
 
@@ -39,6 +39,10 @@ export default class RuledTemplate extends Plugin {
 				if (!file || !(file instanceof TFile)) return;
 				const [, template] = await this.checkRules(file.path);
 				if (!template) return;
+				new Notice(
+					`Auto selected ${template.path} for ${file.path}`,
+					5000
+				);
 				this.insertTemplate(file, template);
 			})
 		);

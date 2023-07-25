@@ -37,6 +37,7 @@ export default class RuledTemplate extends Plugin {
 		this.registerEvent(
 			this.app.vault.on("create", async (file) => {
 				if (!file || !(file instanceof TFile)) return;
+				if (file.stat.size > 0) return;
 				const [, template] = await this.checkRules(file.path);
 				if (!template) return;
 				new Notice(

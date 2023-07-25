@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/YPetremann/obsidian-ruled-template/compare/1.0.2...1.1.0) (2023-07-25)
+
+
+### Features
+
+* added creation notification ([dd0ed3d](https://github.com/YPetremann/obsidian-ruled-template/commit/dd0ed3d3017f69f3d45ff700f760093fc50efd5b))
+
+
+### Bug Fixes
+
+* select template only to empty files ([4e377cd](https://github.com/YPetremann/obsidian-ruled-template/commit/4e377cd1d2b8c65b43030dc12c0f034eb1dd21ce))
+
 ### [1.0.2](https://github.com/YPetremann/obsidian-ruled-template/compare/1.0.1...1.0.2) (2023-07-18)
 
 
